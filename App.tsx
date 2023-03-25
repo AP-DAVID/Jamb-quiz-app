@@ -9,6 +9,11 @@ import { AuthContextProvider } from "src/context/AuthContext";
 import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 import Signup from "screens/Signup";
 import Quiz from "screens/Quiz";
+import Admin from "screens/Admin";
+import AdminSignup from "screens/AdminSignup";
+import Home from "screens/Home";
+import { SWRConfig } from "swr";
+import { string } from "yup";
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
@@ -20,10 +25,19 @@ const cache = new InMemoryCache({
     Query: {
       fields: {
         subjects: {
-          merge(existing, incoming) {
+          merge(incoming) {
             return incoming;
           },
-        }
+        },
+      },
+    },
+    Subject: {
+      fields: {
+        questions: {
+          merge(incoming) {
+            return incoming;
+          },
+        },
       },
     },
   },
@@ -36,6 +50,8 @@ const client = new ApolloClient({
 
 export default function App() {
   const [appIsReady, setAppIsReady] = React.useState(false);
+
+  // console.log(loggedIn)
 
   React.useEffect(() => {
     async function prepare() {
@@ -57,28 +73,47 @@ export default function App() {
   if (appIsReady) {
     SplashScreen.hideAsync();
   }
-  const onLayoutRootView = React.useCallback(async () => {
-    if (appIsReady) {
-      await SplashScreen.hideAsync();
-    }
-  }, [appIsReady]);
 
   if (!appIsReady) {
     return null;
   }
 
   return (
-    <ApolloProvider client={client}>
-      <AuthContextProvider>
-        <NavigationContainer>
-          <Stack.Navigator>
-            <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="Signup" component={Signup} />
-            <Stack.Screen name="Quiz" component={Quiz} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </AuthContextProvider>
-    </ApolloProvider>
+    <SWRConfig value={{ revalidateOnFocus: true }}>
+      <ApolloProvider client={client}>
+        <AuthContextProvider>
+          <NavigationContainer>
+            <Stack.Navigator>
+              {/* <Stack.Screen name="Home" component={Home} /> */}
+              <Stack.Screen
+                name="Login"
+                component={Login}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Signup"
+                component={Signup}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Admin"
+                component={Admin}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="AdminS"
+                component={AdminSignup}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Quiz"
+                component={Quiz}
+                options={{ headerShown: false }}
+              />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </AuthContextProvider>
+      </ApolloProvider>
+    </SWRConfig>
   );
-
 }

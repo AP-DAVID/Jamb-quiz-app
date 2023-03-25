@@ -13,10 +13,26 @@ function AuthContextProvider(props: any) {
     const loggedInRes = await axios.get(
       "http://172.20.10.2:3002/api/user/loggedIn"
     );
-    console.log("loggedInres" , loggedInRes?.data)
+    console.log("loggedInres", loggedInRes?.data);
+
     await setLoggedIn(loggedInRes.data);
     await setLoading(true);
   }
+
+  // async function getAdminIn() {
+  //   // const loggedInRes = await axios.get("http://localhost:5000/auth/loggedIn");
+  //   const loggedInRes = await axios.get(
+  //     "http://172.20.10.2:3002/api/admin/loggedIn"
+  //   );
+  //   console.log("loggedInres", loggedInRes?.data);
+  //   if (loggedInRes?.data?.data) {
+  //     await setLoggedIn(loggedInRes.data);
+  //     await setLoading(true);
+  //     return true;
+  //   }
+  //   await setLoading(true);
+  //   return false;
+  // }
 
   useEffect(() => {
     getLoggedIn();
@@ -28,6 +44,5 @@ function AuthContextProvider(props: any) {
     </AuthContext.Provider>
   );
 }
-
 
 export { AuthContextProvider };

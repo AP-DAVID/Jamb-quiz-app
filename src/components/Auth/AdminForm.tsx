@@ -20,18 +20,15 @@ const validationSchema = Yup.object().shape({
   password: Yup.string().required("Required"),
 });
 
-const Loginform = ({ navigate }: Props) => {
-
-   const { getLoggedIn, loggedIn } = useContext<any>(AuthContext);
+const Adminform = ({ navigate }: Props) => {
+  const { getLoggedIn, loggedIn } = useContext<any>(AuthContext);
 
   const handleLogin = (values: any, { setSubmitting }: any) => {
     axios
-      .post("http://172.20.10.2:3002/api/user/signin", values)
+      .post("http://172.20.10.2:3002/api/admin/signin", values)
       .then((response) => {
         getLoggedIn();
-        console.log("your login", loggedIn)
-        navigate("Login")
-        console.log("response", response.data)
+        navigate("Login");
         alert("Login successful");
       })
       .catch((error) => {
@@ -65,13 +62,13 @@ const Loginform = ({ navigate }: Props) => {
               className="text-3xl text-slate-400 tracking-widest     "
             >
               {" "}
-              Welcome back
+              Welcome Admin
             </Text>
             <Text
               style={{ fontFamily: "Montserrat_400Regular" }}
               className="text-xl text-slate-300"
             >
-              Login to your account
+              Login to your Admin account
             </Text>
           </View>
 
@@ -143,10 +140,10 @@ const Loginform = ({ navigate }: Props) => {
                 className="text-white"
                 style={{ fontFamily: "Montserrat_400Regular" }}
               >
-                Don't have an account?{" "}
+                Don't have an Admin account?{" "}
                 <Text
                   className="text-sky-400"
-                  onPress={() => navigate("Signup")}
+                  onPress={() => navigate("AdminS")}
                 >
                   Signup
                 </Text>
@@ -158,12 +155,12 @@ const Loginform = ({ navigate }: Props) => {
                 className="text-white"
                 style={{ fontFamily: "Montserrat_400Regular" }}
               >
-                Are you an admin?{" "}
+                Are you a consumer?{" "}
                 <Text
                   className="text-sky-400"
-                  onPress={() => navigate("Admin")}
+                  onPress={() => navigate("Login")}
                 >
-                  Sign to Admin
+                  Consumer Login
                 </Text>
               </Text>
             </View>
@@ -174,4 +171,4 @@ const Loginform = ({ navigate }: Props) => {
   );
 };
 
-export default Loginform;
+export default Adminform;

@@ -23,5 +23,17 @@ const GET_SUBJECT_BY_ID = gql`
     }
   }
 `;
+const GET_QUESTION_BY_ID = gql`
+  query getQuestionById($id: ID!) {
+    question(id: $id) {
+      id
+      question
+      options
+      answer
+    }
+  }
+`;
 
-export { GET_SUBJECTS, GET_SUBJECT_BY_ID };
+
+
+export { GET_SUBJECTS, GET_SUBJECT_BY_ID, GET_QUESTION_BY_ID };

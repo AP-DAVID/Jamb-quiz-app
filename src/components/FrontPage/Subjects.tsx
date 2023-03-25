@@ -22,7 +22,7 @@ type Props = {
 
 const Subject = ({navigate}: Props) => {
   const [open, setOpen] = useState(true)
-  const { loading, error, data } = useQuery(GET_SUBJECTS);
+  const { loading, error, data } = useQuery(GET_SUBJECTS, {pollInterval : 3000});
 
   if (loading) return <Loader open={open} setOpen={setOpen}/>
 
@@ -49,7 +49,7 @@ const Subject = ({navigate}: Props) => {
 
       <FlatList
         data={data?.subjects}
-        className="mb-64"
+        className="mb-20"
         renderItem={renderSubjectCard}
         keyExtractor={(item) => item.id.toString()}
       />

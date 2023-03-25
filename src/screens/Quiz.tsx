@@ -30,7 +30,7 @@ const Quiz = ({ route }: Props) => {
   const { id } = route.params;
   const [open, setOpen] = useState(true);
   const { loading, error, data } = useQuery(GET_SUBJECT_BY_ID, {
-    variables: { id: id },
+    variables: { id: id }, pollInterval : 7000
   });
 
   console.log(data);

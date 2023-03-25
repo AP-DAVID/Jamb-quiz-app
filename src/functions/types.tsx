@@ -7,3 +7,10 @@ export type Subjects = {
     answer: number;
   }[];
 };
+
+export type Question = {
+  id : string;
+  question: string;
+  options: string[];
+  answer: number;
+};

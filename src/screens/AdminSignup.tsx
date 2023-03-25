@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import React from "react";
 import { Image } from "expo-image";
-import Signupform from "components/Auth/Signupform";
+import AdminSignupF from "components/Auth/AdminSignupF";
 
 type Props = {
   navigation: {
@@ -16,7 +16,7 @@ type Props = {
   };
 };
 
-const Signup = ({ navigation: { navigate } }: Props) => {
+const AdminSignup = ({ navigation: { navigate } }: Props) => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <KeyboardAvoidingView
@@ -24,15 +24,15 @@ const Signup = ({ navigation: { navigate } }: Props) => {
         behavior="position"
         keyboardVerticalOffset={-100}
       >
-        <View className="font-link flex-col justify-center  space-y-5 h-screen  bg-black">
-          <View className="p-10 h-6  flex-row space-x-3 items-center">
+        <View className="font-link flex-col justify-center space-y-5 h-screen  bg-black">
+          <View className="p-10 h-6 flex-row space-x-3 items-center">
             {/* Header */}
             <View className="h-6">
               <Text
                 style={{ fontFamily: "Montserrat_400Regular" }}
                 className="text-white font-bold text-xl"
               >
-                Sign Up
+                Admin Signup
               </Text>
             </View>
             <View className="h-3 w-3 rounded-full bg-green-500"></View>
@@ -40,7 +40,7 @@ const Signup = ({ navigation: { navigate } }: Props) => {
 
           {/* Signup Form */}
           <View className="w-full flex-row justify-center">
-            <Signupform navigate={navigate} />
+            <AdminSignupF navigate={navigate} />
           </View>
 
           {/* <View>
@@ -55,4 +55,4 @@ const Signup = ({ navigation: { navigate } }: Props) => {
   );
 };
 
-export default Signup;
+export default AdminSignup;
