@@ -15,7 +15,7 @@ const { GraphQLDateTime, GraphQLObjectId } = require("graphql-scalars");
 const SubjectType = new GraphQLObjectType({
   name: "Subject",
   fields: () => ({
-    id: { type: GraphQLInt },
+    id: { type: GraphQLID },
     name: { type: GraphQLString },
     questions: {
       type: new GraphQLList(QuestionType),
@@ -33,7 +33,7 @@ const QuestionType = new GraphQLObjectType({
     id: { type: GraphQLID },
     question: { type: GraphQLString },
     options: { type: new GraphQLList(GraphQLString) },
-    answer: { type: GraphQLInt },
+    answer: { type: GraphQLString },
     subject: {
       type: SubjectType,
       resolve(parent, args) {
@@ -61,11 +61,21 @@ const HeadType = new GraphQLObjectType({
 const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
   fields: {
+    // client
+    subjects: {
+      type: new GraphQLList(SubjectType),
+      resolve(parent, args) {
+        return Subject.find();
+      },
+    },
     subject: {
       type: SubjectType,
-      args: { id: { type: GraphQLInt } },
+      args: { id: { type: GraphQLID } },
       resolve(parent, args) {
-        return Subject.findOne({ id: args.id });
+        return Subject.findById(args.id).populate({
+          path: "questions",
+          model: Question,
+        });
       },
     },
     question: {
@@ -92,13 +102,15 @@ const Mutation = new GraphQLObjectType({
     addSubject: {
       type: SubjectType,
       args: {
-        id: { type: GraphQLInt },
         name: { type: GraphQLString },
         questionIds: { type: new GraphQLList(GraphQLID) },
       },
-      resolve(parent, args) {
+      async resolve(parent, args) {
+        const findSubject =await Subject.findOne({name : args.name})
+        if(findSubject){
+          throw new Error("Subject already exists");
+        }
         const subject = new Subject({
-          id: args.id,
           name: args.name,
           questions: args.questionIds,
         });
@@ -111,7 +123,7 @@ const Mutation = new GraphQLObjectType({
         subjectId: { type: GraphQLID },
         question: { type: GraphQLString },
         options: { type: new GraphQLList(GraphQLString) },
-        answer: { type: GraphQLInt },
+        answer: { type: GraphQLString },
       },
       resolve(parent, args) {
         let question = new Question({
@@ -145,9 +157,9 @@ const Mutation = new GraphQLObjectType({
 
     deleteSubject: {
       type: SubjectType,
-      args: { id: { type: GraphQLInt } },
+      args: { id: { type: GraphQLID } },
       resolve(parent, args) {
-        return Subject.findOneAndDelete({ id: args.id });
+        return Subject.findByIdAndRemove(args.id);
       },
     },
     deleteQuestion: {
@@ -162,7 +174,7 @@ const Mutation = new GraphQLObjectType({
       args: {
         id: { type: GraphQLID },
         question: { type: GraphQLString },
-        answer: { type: GraphQLInt },
+        answer: { type: GraphQLString },
         options: { type: new GraphQLList(GraphQLString) },
         subjectId: { type: GraphQLID },
       },
@@ -190,7 +202,7 @@ const Mutation = new GraphQLObjectType({
       type: QuestionType,
       args: {
         id: { type: GraphQLID },
-        answer: { type: GraphQLInt },
+        answer: { type: GraphQLString },
       },
       resolve(parent, args) {
         return Question.findByIdAndUpdate(args.id, { answer: args.answer });
