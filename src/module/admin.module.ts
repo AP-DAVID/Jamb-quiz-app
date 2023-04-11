@@ -1,10 +1,8 @@
 /* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
-import { UserService } from '../service/user.service';
-import { UserController } from '../controller/user.controller';
-import { User, UserSchema } from '../model/user.schema';
-import { AdminSchema} from '../model/admin.schema';
-import { Admin, AdminDocument } from '../model/admin.schema'; 
+import { AdminService } from '../service/admin.service';
+import { AdminController } from '../controller/admin.controller';
+import { Admin, AdminSchema } from '../model/admin.schema';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { JwtModule } from '@nestjs/jwt';
@@ -17,10 +15,9 @@ const secret = process.env.JWT_SECRET;
   imports: [
     MongooseModule.forFeature([
       {
-        name: User.name,
-        schema: UserSchema,
+        name: Admin.name,
+        schema: AdminSchema,
       },
-      { name: Admin.name, schema: AdminSchema },
     ]),
     JwtModule.register({
       secret,
@@ -30,7 +27,7 @@ const secret = process.env.JWT_SECRET;
       rootPath: join(__dirname, '..', 'public'),
     }),
   ],
-  controllers: [UserController],
-  providers: [UserService, Admin],
+  controllers: [AdminController],
+  providers: [AdminService],
 })
-export class UserModule {}
+export class AdminModule {}

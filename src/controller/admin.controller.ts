@@ -12,25 +12,25 @@ import {
   Req,
   Res,
 } from '@nestjs/common';
-import { User } from '../model/user.schema';
-import { UserService } from '../service/user.service';
-import { CreateUserDto } from '../dto/create-user.dto';
+import { Admin } from '../model/admin.schema';
+import { AdminService } from '../service/admin.service';
+import { CreateAdminDto } from '../dto/create-admin.dto';
 import { JwtService } from '@nestjs/jwt';
 import { Request, Response } from 'express';
 
-@Controller('api/user')
-export class UserController {
+@Controller('api/admin')
+export class AdminController {
   constructor(
-    private readonly userServe: UserService,
+    private readonly userServe: AdminService,
     private jwtService: JwtService,
   ) {}
 
   @Post()
   async Signup(
     @Res() response: Response,
-    @Body() createUserDto: CreateUserDto,
+    @Body() createAdminDto: CreateAdminDto,
   ) {
-    const newUSer = await this.userServe.signup(createUserDto);
+    const newUSer = await this.userServe.signup(createAdminDto);
     return response.status(HttpStatus.CREATED).json({
       newUSer,
     });
@@ -39,16 +39,15 @@ export class UserController {
   @Post('/signin')
   async SignIn(
     @Res() response: Response,
-    @Body() createUserDto: CreateUserDto,
+    @Body() createAdminDto: CreateAdminDto,
     @Req() request: Request,
   ) {
     try {
       const tokenn = await this.userServe.signin(
-        createUserDto,
+        createAdminDto,
         this.jwtService,
         response,
       );
-      
     } catch (err) {
       return response.status(HttpStatus.CREATED).json(err);
     }
