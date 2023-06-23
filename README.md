@@ -48,7 +48,7 @@ git checkout jamb-auth
 expo install
 3. Make sure you have the necessary tools set up for React Native development.
 
-4. Start the Expo development server: expo start
+4. Start the Expo development server: npm start
 5. Follow the instructions in the console to open the app on a connected device or emulator.
 
 Please note that additional configuration steps might be required depending on your development environment.
